@@ -88,7 +88,10 @@ namespace PropertyAnalysisMobile
         {
             if (panel != null)
             {
-                panel.Children.Remove(listView);
+                if (listView != null)
+                {
+                    panel.Children.Remove(listView);
+                }
 
                 listView = new ListView
                 {
@@ -136,6 +139,8 @@ namespace PropertyAnalysisMobile
             }
 
             suburbId = locations.Suburbs.ElementAt(suburbSelected).Id;
+            var props = tmHelper.GetProperties(regionId, districtId, suburbId);
+            AddProperties(props, panel);
         }
 
         /// <summary>
@@ -161,6 +166,8 @@ namespace PropertyAnalysisMobile
             suburbId = 0;
 
             SetSuburbs();
+            var props = tmHelper.GetProperties(regionId, districtId, suburbId);
+            AddProperties(props, panel);
         }
 
         /// <summary>

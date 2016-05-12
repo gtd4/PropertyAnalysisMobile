@@ -65,7 +65,13 @@ namespace PropertyAnalysisMobile
                     responseString = response.Content.ReadAsStringAsync().Result;
                     tpr = JsonConvert.DeserializeObject<TradeMePropertyResultsViewModel>(responseString);
                 }
-
+                if(!tpr.Properties.Any())
+                {
+                    tpr.Properties.Add(new PropertyModel
+                    {
+                        Title = "Sorry No Results To Show",
+                    });
+                }
 
                 return tpr.Properties;
             }
@@ -108,10 +114,6 @@ namespace PropertyAnalysisMobile
                 if (response.IsSuccessStatusCode)
                 {
                     string responseString = response.Content.ReadAsStringAsync().Result;
-
-                    //To Reduce code and repetition, I tried to abstract region,district, and suburb out to a parent class,
-                    //and passed a list of these to a single method rather than having 3 methods that do almost the same thing.
-                    //this may use more memory as a 2nd list of the parent object has to be created.
 
                     //ToDo: Look into how to improve this.
                     var loc = JsonConvert.DeserializeObject<List<Region>>(responseString);
