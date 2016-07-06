@@ -1,4 +1,5 @@
 ﻿using PropertyAnalysisMobile.CustomCells;
+using PropertyAnalysisMobile.Helpers;
 using PropertyAnalysisMobile.Models;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace PropertyAnalysisMobile
         Picker Districts;
         Picker Suburbs;
         TradeMeHelper tmHelper;
+        PickerHelper pckrHelper;
         ListView listView;
         PropertyFilterModel locations;
         int regionId = 0, districtId = 0, suburbId = 0, regionSelected = 0, districtSelected = 0, suburbSelected = 0;
@@ -24,6 +26,7 @@ namespace PropertyAnalysisMobile
 
         public MainPage()
         {
+            pckrHelper = new PickerHelper();
             tmHelper = new TradeMeHelper();
             var props = tmHelper.GetProperties();
 
@@ -60,50 +63,26 @@ namespace PropertyAnalysisMobile
             });
             panel.Children.Add(Suburbs);
 
-            AddProperties(props, panel);
-
             scrollView.Content = panel;
             this.Content = scrollView;
         }
 
+        /// <summary>
+        /// Initializes the 3 pickers used
+        /// </summary>
         private void InitPickers()
         {
-            Regions = new Picker();
-            Regions.SelectedIndex = regionSelected;
-            Regions.Title = "Regions";
+            Regions = pckrHelper.InitPicker("Regions", regionSelected);         
             Regions.SelectedIndexChanged += Regions_SelectedIndexChanged;
 
-            Districts = new Picker();
-            Districts.SelectedIndex = districtSelected;
-            Districts.Title = "Districts";
+            Districts = pckrHelper.InitPicker("Districts", districtSelected);
             Districts.SelectedIndexChanged += Districts_SelectedIndexChanged;
 
-            Suburbs = new Picker();
-            Suburbs.SelectedIndex = suburbSelected;
-            Suburbs.Title = "Suburbs";
+            Suburbs = pckrHelper.InitPicker("Suburbs", suburbSelected);         
             Suburbs.SelectedIndexChanged += Suburbs_SelectedIndexChanged;
         }
 
-        private void AddProperties(List<PropertyModel> props, StackLayout panel)
-        {
-            if (panel != null)
-            {
-                if (listView != null)
-                {
-                    panel.Children.Remove(listView);
-                }
-
-                listView = new ListView
-                {
-                    ItemsSource = props,
-                    ItemTemplate = new DataTemplate(typeof(PropertyListingCell)),
-
-                };
-
-                var g = "gf";
-                panel.Children.Add(listView);
-            }
-        }
+       
 
         /// <summary>
         /// Populate all 3 location pickers with default data
@@ -125,22 +104,13 @@ namespace PropertyAnalysisMobile
         /// <param name="e"></param>
         private void Suburbs_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+
             var picker = sender as Picker;
 
-            if (picker.SelectedIndex >= 0)
-            {
-                suburbSelected = picker.SelectedIndex;
-                
-            }
-            else
-            {
-                suburbSelected = 0;
-            }
+            suburbSelected = pckrHelper.SetSelected(picker);
 
             suburbId = locations.Suburbs.ElementAt(suburbSelected).Id;
             var props = tmHelper.GetProperties(regionId, districtId, suburbId);
-            AddProperties(props, panel);
         }
 
         /// <summary>
@@ -150,24 +120,16 @@ namespace PropertyAnalysisMobile
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Districts_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+        {            
             var picker = sender as Picker;
+            districtSelected = pckrHelper.SetSelected(picker);
 
-            if (picker.SelectedIndex >= 0)
-            {
-                districtSelected = picker.SelectedIndex;            
-            }
-            else
-            {
-                districtSelected = 0;
-            }
             districtId = locations.Districts.ElementAt(districtSelected).Id;
             suburbId = 0;
 
             SetSuburbs();
             var props = tmHelper.GetProperties(regionId, districtId, suburbId);
-            AddProperties(props, panel);
+
         }
 
         /// <summary>
@@ -187,7 +149,6 @@ namespace PropertyAnalysisMobile
 
             SetDistricts();
             var props = tmHelper.GetProperties(regionId, districtId, suburbId);
-            AddProperties(props, panel);
         }
 
         private void SetSuburbs()
@@ -208,27 +169,13 @@ namespace PropertyAnalysisMobile
         private void SetLocalities(Picker picker, List<TradeMeLocationModel> tmlm)
         {
             picker.Items.Clear();
-            
+
             foreach (var location in tmlm)
             {
                 picker.Items.Add(location.Name);
 
             }
             picker.SelectedIndex = 0;
-        }
-
-
-
-        private Picker GetLocationPicker()
-        {
-            var picker = new Picker();
-
-            picker.Items.Add("All");
-            picker.Items.Add("Wellington");
-
-            return picker;
-
-
         }
 
     }
