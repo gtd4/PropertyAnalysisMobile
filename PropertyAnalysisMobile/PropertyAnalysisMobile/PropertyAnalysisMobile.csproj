@@ -39,15 +39,19 @@
     <Compile Include="CustomCells\PropertyListingCell.cs" />
     <Compile Include="CustomControls\PropertyListingPicker.cs" />
     <Compile Include="Helpers\PickerHelper.cs" />
+    <Compile Include="Helpers\Profiler.cs" />
     <Compile Include="MainPage.cs" />
+    <Compile Include="Models\Attribute.cs" />
     <Compile Include="Models\District.cs" />
     <Compile Include="Models\PropertyFilterModel.cs" />
+    <Compile Include="Models\PropertyListItem.cs" />
     <Compile Include="Models\PropertyModel.cs" />
     <Compile Include="Models\PropertyViewModel.cs" />
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\Suburb.cs" />
     <Compile Include="Models\TradeMeLocationModel.cs" />
     <Compile Include="Models\TradeMePropertyResultsViewModel.cs" />
+    <Compile Include="Pages\PropertyListingPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\TradeMeHelper.cs" />
   </ItemGroup>
@@ -75,6 +79,9 @@
     <Reference Include="Xamarin.Forms.Xaml, Version=1.3.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.1.3.3.6323\lib\portable-win+net45+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Xamarin.iOS">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Xamarin.iOS\v1.0\Xamarin.iOS.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

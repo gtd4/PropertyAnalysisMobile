@@ -1,6 +1,7 @@
 ﻿using PropertyAnalysisMobile.CustomCells;
 using PropertyAnalysisMobile.Helpers;
 using PropertyAnalysisMobile.Models;
+using PropertyAnalysisMobile.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace PropertyAnalysisMobile
         Picker Regions;
         Picker Districts;
         Picker Suburbs;
+        Button searchBtn;
         TradeMeHelper tmHelper;
         PickerHelper pckrHelper;
         ListView listView;
@@ -28,7 +30,6 @@ namespace PropertyAnalysisMobile
         {
             pckrHelper = new PickerHelper();
             tmHelper = new TradeMeHelper();
-            var props = tmHelper.GetProperties();
 
             InitPickers();
 
@@ -65,6 +66,18 @@ namespace PropertyAnalysisMobile
 
             scrollView.Content = panel;
             this.Content = scrollView;
+
+            searchBtn = new Button();
+            searchBtn.Text = "Search";
+            searchBtn.Clicked += HandleTouchUpInside;
+
+            panel.Children.Add(searchBtn);
+
+        }
+
+        void HandleTouchUpInside(object sender, EventArgs ea)
+        {
+            Navigation.PushAsync(new PropertyListingPage(regionId,districtId,suburbId));
         }
 
         /// <summary>
@@ -72,14 +85,17 @@ namespace PropertyAnalysisMobile
         /// </summary>
         private void InitPickers()
         {
-            Regions = pckrHelper.InitPicker("Regions", regionSelected);         
-            Regions.SelectedIndexChanged += Regions_SelectedIndexChanged;
+            using (var profiler = new Profiler("Init Pickers: "))
+            {
+                Regions = pckrHelper.InitPicker("Regions", regionSelected);
+                Regions.SelectedIndexChanged += Regions_SelectedIndexChanged;
 
-            Districts = pckrHelper.InitPicker("Districts", districtSelected);
-            Districts.SelectedIndexChanged += Districts_SelectedIndexChanged;
+                Districts = pckrHelper.InitPicker("Districts", districtSelected);
+                Districts.SelectedIndexChanged += Districts_SelectedIndexChanged;
 
-            Suburbs = pckrHelper.InitPicker("Suburbs", suburbSelected);         
-            Suburbs.SelectedIndexChanged += Suburbs_SelectedIndexChanged;
+                Suburbs = pckrHelper.InitPicker("Suburbs", suburbSelected);
+                Suburbs.SelectedIndexChanged += Suburbs_SelectedIndexChanged;
+            }
         }
 
        
@@ -87,10 +103,11 @@ namespace PropertyAnalysisMobile
         /// <summary>
         /// Populate all 3 location pickers with default data
         /// </summary>
-        private void SetLocalities()
+        private async void SetLocalities()
         {
 
-            locations = tmHelper.GetLocations(regionId, districtId, suburbId);
+            Task<PropertyFilterModel> locales = tmHelper.GetLocations(regionId, districtId, suburbId);
+            locations = await locales;
 
             SetLocalities(Regions, (locations.Regions.Cast<TradeMeLocationModel>().ToList()));
             SetLocalities(Districts, locations.Districts.Cast<TradeMeLocationModel>().ToList());
@@ -110,7 +127,7 @@ namespace PropertyAnalysisMobile
             suburbSelected = pckrHelper.SetSelected(picker);
 
             suburbId = locations.Suburbs.ElementAt(suburbSelected).Id;
-            var props = tmHelper.GetProperties(regionId, districtId, suburbId);
+
         }
 
         /// <summary>
@@ -128,7 +145,7 @@ namespace PropertyAnalysisMobile
             suburbId = 0;
 
             SetSuburbs();
-            var props = tmHelper.GetProperties(regionId, districtId, suburbId);
+
 
         }
 
@@ -140,29 +157,37 @@ namespace PropertyAnalysisMobile
         /// <param name="e"></param>
         private void Regions_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var picker = sender as Picker;
+            using (var prof = new Profiler("Regions_SelectedIndexChanged"))
+            {
+                var picker = sender as Picker;
 
-            var regionSelected = picker.SelectedIndex;
-            regionId = locations.Regions.ElementAt(regionSelected).Id;
-            suburbId = 0;
-            districtId = 0;
+                var regionSelected = picker.SelectedIndex;
+                regionId = locations.Regions.ElementAt(regionSelected).Id;
+                suburbId = 0;
+                districtId = 0;
 
-            SetDistricts();
-            var props = tmHelper.GetProperties(regionId, districtId, suburbId);
+                SetDistricts();
+            }
+
         }
 
-        private void SetSuburbs()
+        private async void SetSuburbs()
         {
-            locations = tmHelper.GetLocations(regionId, districtId, suburbId);
+            Task<PropertyFilterModel> locales = tmHelper.GetLocations(regionId, districtId, suburbId);
+            locations = await locales;
             SetLocalities(Suburbs, locations.Suburbs.Cast<TradeMeLocationModel>().ToList());
         }
 
-        private void SetDistricts()
+        private async void SetDistricts()
         {
-            locations = tmHelper.GetLocations(regionId, districtId, 0);
+            using (var prof = new Profiler("SetDistricts"))
+            {
+                Task<PropertyFilterModel> locales = tmHelper.GetLocations(regionId, districtId, suburbId);
+                locations = await locales;
 
-            SetLocalities(Districts, locations.Districts.Cast<TradeMeLocationModel>().ToList());
-            SetLocalities(Suburbs, locations.Suburbs.Cast<TradeMeLocationModel>().ToList());
+                SetLocalities(Districts, locations.Districts.Cast<TradeMeLocationModel>().ToList());
+                //SetLocalities(Suburbs, locations.Suburbs.Cast<TradeMeLocationModel>().ToList());
+            }
 
         }
 

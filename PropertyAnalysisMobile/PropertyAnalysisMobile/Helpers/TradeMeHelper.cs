@@ -58,7 +58,9 @@ namespace PropertyAnalysisMobile
             using (var client = new HttpClient())
             {
                 InitClient(authHeader, client);
-                var response = client.GetAsync(url).Result;
+                
+                var props = client.GetAsync(url);
+                var response = props.Result;
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -100,19 +102,19 @@ namespace PropertyAnalysisMobile
             return sb.ToString();
         }
 
-        public PropertyFilterModel GetLocations(int localityId = 0, int districtId = 0, int suburbId = 0, int minBedroom = 0, int maxBedroom = 0, int minBathroom = 0, int maxBathroom = 0, int priceMin = 0, int priceMax = 0)
+        public async Task<PropertyFilterModel> GetLocations(int localityId = 0, int districtId = 0, int suburbId = 0, int minBedroom = 0, int maxBedroom = 0, int minBathroom = 0, int maxBathroom = 0, int priceMin = 0, int priceMax = 0)
         {
             var model = new PropertyFilterModel();
 
             using (var client = new HttpClient())
             {
                 InitClient(null, client);
-                var response = client.GetAsync(locationsUrl).Result;
-
-
+                var locations = client.GetAsync(locationsUrl);
+                var response = await locations;
 
                 if (response.IsSuccessStatusCode)
                 {
+                    
                     string responseString = response.Content.ReadAsStringAsync().Result;
 
                     //ToDo: Look into how to improve this.
@@ -148,25 +150,6 @@ namespace PropertyAnalysisMobile
 
                     model.Suburbs.AddRange(suburbs.ToList());
 
-                    //model.BedroomsMin = PopulateMinMaxLists(minBedroom);
-                    //model.BedroomsMax = PopulateMinMaxLists(maxBedroom);
-
-                    //model.BathroomsMin = PopulateMinMaxLists(minBathroom);
-                    //model.BathroomsMax = PopulateMinMaxLists(maxBathroom);
-
-                    //model.PriceMin = PopulatePriceLists(priceMin);
-                    //model.PriceMax = PopulatePriceLists(priceMax);
-
-                    //model.SelectedLocationId = localityId;
-                    //model.SelectedDistrictId = districtId;
-                    //model.SelectedSuburbId = suburbId;
-                    //model.MinBedRoom = minBedroom;
-                    //model.MaxBedRoom = maxBedroom;
-                    //model.MinBathRoom = minBathroom;
-                    //model.MaxBathRoom = maxBathroom;
-
-                    //model.MinPrice = priceMin;
-                    //model.MaxPrice = priceMax;
                 }
             }
             return model;
@@ -181,6 +164,50 @@ namespace PropertyAnalysisMobile
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("OAuth", authHeader);
             }
+        }
+
+        public PropertyModel GetDetails(int id)
+        {
+            var authHeader = string.Format("oauth_consumer_key={0}, oauth_token={1}, oauth_signature_method=PLAINTEXT, oauth_signature={2}&{3}", consumerKey, oauthToken, consumerSecret, oauthSecret);
+
+            var model = new PropertyModel();
+
+            using (var client = new HttpClient())
+            {
+                InitClient(authHeader, client);
+                model = GetPropertyDetails(id, model, client);
+            }
+
+            return model;
+        }
+
+        private PropertyModel GetPropertyDetails(int id, PropertyModel model, HttpClient client)
+        {
+            var response = client.GetAsync(string.Format("{0}Listings/{1}.json", prodEnv, id)).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseString = response.Content.ReadAsStringAsync().Result;
+
+                model = JsonConvert.DeserializeObject<PropertyModel>(responseString);
+                //model.DetailsJson = responseString;
+
+                foreach (var attr in model.Attributes)
+                {
+                    if (attr.Name.Equals("bedrooms"))
+                    {
+                        model.Bedrooms = attr.Value;
+                        continue;
+                    }
+
+                    if (attr.Name.Equals("bathrooms"))
+                    {
+                        model.Bathrooms = attr.Value;
+                    }
+                }
+            }
+
+            return model;
         }
     }
 }
