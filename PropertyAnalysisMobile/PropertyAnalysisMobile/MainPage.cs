@@ -42,6 +42,7 @@ namespace PropertyAnalysisMobile
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 Spacing = 20,
+                Padding = 15,
             };
             panel.Children.Add(new Label
             {

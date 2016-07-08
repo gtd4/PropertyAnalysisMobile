@@ -20,7 +20,7 @@ namespace PropertyAnalysisMobile.Pages
             Label header = new Label
             {
                 Text = "Properties",
-                
+
                 HorizontalOptions = LayoutOptions.Center
             };
 
@@ -33,10 +33,12 @@ namespace PropertyAnalysisMobile.Pages
             var props = tmHelper.GetProperties(regionId, districtId, suburbId).Select(
                 x => new PropertyListItem
                 {
-                        Title = x.Title,
-                        Image = x.PictureHref,
+                    Id = x.ListingId,
+                    Title = x.Title,
+                    Image = x.PictureHref,
+
                 });
-            
+
 
 
             var scroll = new ScrollView();
@@ -60,7 +62,7 @@ namespace PropertyAnalysisMobile.Pages
                     propList,
                 }
             };
-            
+
         }
 
         void OnSelection(object sender, SelectedItemChangedEventArgs e)
@@ -68,6 +70,7 @@ namespace PropertyAnalysisMobile.Pages
             var prop = sender as ListView;
             var item = prop.SelectedItem as PropertyListItem;
             Debug.WriteLine(item.Title);
+            Navigation.PushAsync(new DetailsPage(item.Id));
         }
 
         //private async Task<List<PropertyModel>> GetProperties(int regionId, int districtId, int suburbId)

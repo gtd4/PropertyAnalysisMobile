@@ -183,7 +183,7 @@ namespace PropertyAnalysisMobile
 
         private PropertyModel GetPropertyDetails(int id, PropertyModel model, HttpClient client)
         {
-            var response = client.GetAsync(string.Format("{0}Listings/{1}.json", prodEnv, id)).Result;
+            var response = client.GetAsync(string.Format("{0}Listings/{1}.json", devEnv, id)).Result;
 
             if (response.IsSuccessStatusCode)
             {

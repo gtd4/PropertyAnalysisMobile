@@ -89,8 +89,8 @@ namespace PropertyAnalysisMobile.Models
         [JsonProperty("Body")]
         public string Description { get; set; }
 
-        //[JsonProperty("Photos")]
-        //public List<PhotoModel> Photos { get; set; }
+        [JsonProperty("Photos")]
+        public List<PhotoModel> Photos { get; set; }
 
         [JsonProperty("WasPrice")]
         public decimal WasPrice { get; set; }
@@ -109,13 +109,13 @@ namespace PropertyAnalysisMobile.Models
 
 
 
-        //public string Location
-        //{
-        //    get
-        //    {
-        //        return Attributes.Any() ? Attributes.Where(x => string.Equals(x.Name.ToLower(), "Location".ToLower())).FirstOrDefault().Value : null;
-        //    }
-        //}
+        public string Location
+        {
+            get
+            {
+                return Attributes.Any() ? Attributes.Where(x => string.Equals(x.Name.ToLower(), "Location".ToLower())).FirstOrDefault().Value : null;
+            }
+        }
 
         //public decimal InitialRent
         //{
@@ -137,29 +137,29 @@ namespace PropertyAnalysisMobile.Models
         //    }
         //}
 
-        //public decimal InitialYieldPercentage
-        //{
-        //    get
-        //    {
-        //        return 10;
-        //    }
-        //}
+        public decimal InitialYieldPercentage
+        {
+            get
+            {
+                return 10;
+            }
+        }
 
-        //public decimal InitialVacancyRate
-        //{
-        //    get
-        //    {
-        //        return 2;
-        //    }
-        //}
+        public decimal InitialVacancyRate
+        {
+            get
+            {
+                return 2;
+            }
+        }
 
-        //public decimal InitialInterestRate
-        //{
-        //    get
-        //    {
-        //        return 6.5M;
-        //    }
-        //}
+        public decimal InitialInterestRate
+        {
+            get
+            {
+                return 6.5M;
+            }
+        }
 
         //public decimal AnnualInterestCost
         //{
@@ -185,37 +185,37 @@ namespace PropertyAnalysisMobile.Models
         //    }
         //}
 
-        //public decimal InitialRates
-        //{
-        //    get
-        //    {
-        //        return 2000;
-        //    }
-        //}
+        public decimal InitialRates
+        {
+            get
+            {
+                return 2000;
+            }
+        }
 
-        //public decimal InitialRepairs
-        //{
-        //    get
-        //    {
-        //        return 1000;
-        //    }
-        //}
+        public decimal InitialRepairs
+        {
+            get
+            {
+                return 1000;
+            }
+        }
 
-        //public decimal InitialInsurance
-        //{
-        //    get
-        //    {
-        //        return 1000;
-        //    }
-        //}
+        public decimal InitialInsurance
+        {
+            get
+            {
+                return 1000;
+            }
+        }
 
-        //public decimal PropertyManagementPercentage
-        //{
-        //    get
-        //    {
-        //        return 8;
-        //    }
-        //}
+        public decimal PropertyManagementPercentage
+        {
+            get
+            {
+                return 8;
+            }
+        }
 
         //public decimal PropertyManagementAmount
         //{
@@ -249,13 +249,13 @@ namespace PropertyAnalysisMobile.Models
         //    }
         //}
 
-        //public decimal VacancyRate
-        //{
-        //    get
-        //    {
-        //        return 52 - InitialVacancyRate;
-        //    }
-        //}
+        public decimal VacancyRate
+        {
+            get
+            {
+                return 52 - InitialVacancyRate;
+            }
+        }
 
         //public decimal SurplusAfterExpense
         //{
@@ -265,21 +265,21 @@ namespace PropertyAnalysisMobile.Models
         //    }
         //}
 
-        //public string FullAddress
-        //{
-        //    get
-        //    {
-        //        return string.IsNullOrEmpty(Location) ? string.Format("{0}, {1}, {2}", Address, Suburb, District) : Location;
-        //    }
-        //}
+        public string FullAddress
+        {
+            get
+            {
+                return string.IsNullOrEmpty(Location) ? string.Format("{0}, {1}, {2}", Address, Suburb, District) : Location;
+            }
+        }
 
-        //public string ListedDate
-        //{
-        //    get
-        //    {
-        //        return string.Format("{0:dd MMM yy}", StartDate);
-        //    }
-        //}
+        public string ListedDate
+        {
+            get
+            {
+                return string.Format("{0:dd MMM yy}", StartDate);
+            }
+        }
 
         public PropertyModel()
         {
