@@ -24,9 +24,15 @@ namespace PropertyAnalysisMobile.Pages
                 HorizontalOptions = LayoutOptions.Center
             };
 
+            var ic = new ImageCell();
+
             var cell = new DataTemplate(typeof(ImageCell));
             cell.SetBinding(ImageCell.TextProperty, "Title");
             cell.SetBinding(ImageCell.ImageSourceProperty, "Image");
+
+            var vals = cell.Values;
+            
+            
 
             tmHelper = new TradeMeHelper();
 
@@ -46,6 +52,7 @@ namespace PropertyAnalysisMobile.Pages
             {
                 ItemsSource = props,
                 ItemTemplate = cell,
+                RowHeight = 60
             };
 
             propList.ItemSelected += OnSelection;

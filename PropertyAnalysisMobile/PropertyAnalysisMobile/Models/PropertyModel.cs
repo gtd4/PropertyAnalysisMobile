@@ -107,7 +107,8 @@ namespace PropertyAnalysisMobile.Models
         [JsonProperty("Attributes")]
         public List<Attribute> Attributes { get; set; }
 
-
+        [JsonProperty("GeographicLocation")]
+        public GeographicLocation GeographicLocation { get; set; }
 
         public string Location
         {

@@ -70,13 +70,13 @@ namespace PropertyAnalysisMobile
 
             searchBtn = new Button();
             searchBtn.Text = "Search";
-            searchBtn.Clicked += HandleTouchUpInside;
+            searchBtn.Clicked += ButtonClicked;
 
             panel.Children.Add(searchBtn);
 
         }
 
-        void HandleTouchUpInside(object sender, EventArgs ea)
+        void ButtonClicked(object sender, EventArgs ea)
         {
             Navigation.PushAsync(new PropertyListingPage(regionId,districtId,suburbId));
         }

@@ -34,10 +34,10 @@ namespace PropertyAnalysisMobile
         //string oauthSecret = "C640C7AB6D8DBE8B453721FD14E9525D";
 
         //DevMob
-        string consumerKey = "E65A7D70ED18AD748FC8843765C8C960";
-        string consumerSecret = "C0CA632020F9938A9758B8582E799D88";
-        string oauthToken = "B327F208D97FD93450F0867280913C04";
-        string oauthSecret = "86AF8C44248DE71F9BE3BD63AEF94C5A";
+        string consumerKey = "36D5A359873686CE87E9E6F1B1369083";
+        string consumerSecret = "5A192D3AC39E9814FDDDDF59FF3F3F99";
+        string oauthToken = "C625D0A42B49C251BAEB18F0AA9EAEF3";
+        string oauthSecret = "DB8E37E016D5D288714D1252A2F1EC56";
 
         const int pageSize = 12;
 
@@ -81,7 +81,7 @@ namespace PropertyAnalysisMobile
 
         private string BuildApiUrl(int regionId, int districtId, int suburbId /*,int minBed, int maxBed, int minBath, int maxBath, int priceMin, int priceMax, int page, string propType = "Residential"*/)
         {
-            var url = string.Format("{0}Search/Property/Residential.json?photo_size=Gallery&rows=12&sort_order=PriceAsc&property_type=Apartment,House,Townhouse,Unit", devEnv);
+            var url = string.Format("{0}Search/Property/Residential.json?photo_size=Gallery&rows=12&sort_order=PriceAsc&property_type=Apartment,House,Townhouse,Unit", prodEnv);
             var sb = new StringBuilder(url);
 
             if (regionId != 0)
@@ -183,7 +183,7 @@ namespace PropertyAnalysisMobile
 
         private PropertyModel GetPropertyDetails(int id, PropertyModel model, HttpClient client)
         {
-            var response = client.GetAsync(string.Format("{0}Listings/{1}.json", devEnv, id)).Result;
+            var response = client.GetAsync(string.Format("{0}Listings/{1}.json", prodEnv, id)).Result;
 
             if (response.IsSuccessStatusCode)
             {
