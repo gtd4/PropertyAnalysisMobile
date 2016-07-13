@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PropertyAnalysisMobile.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -11,10 +12,10 @@ namespace PropertyAnalysisMobile.Pages
 {
     public class MapPage : ContentPage
     {
-        Map PropertyMap;
+        PropertyMap PropertyMap;
         Geocoder geoCoder;
 
-        public MapPage(Map map)
+        public MapPage(PropertyMap map)
         {
             PropertyMap = map;
             var pin = map.Pins.ElementAt(0);

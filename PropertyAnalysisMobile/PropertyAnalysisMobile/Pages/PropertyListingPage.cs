@@ -17,6 +17,13 @@ namespace PropertyAnalysisMobile.Pages
         TradeMeHelper tmHelper;
         public PropertyListingPage(int regionId, int districtId, int suburbId)
         {
+            Init(regionId, districtId, suburbId);
+
+        }
+
+        private async Task Init(int regionId, int districtId, int suburbId)
+        {
+            ActivityIndicator actIndicator = new ActivityIndicator();
             Label header = new Label
             {
                 Text = "Properties",
@@ -31,19 +38,20 @@ namespace PropertyAnalysisMobile.Pages
             cell.SetBinding(ImageCell.ImageSourceProperty, "Image");
 
             var vals = cell.Values;
-            
-            
+
+
 
             tmHelper = new TradeMeHelper();
 
-            var props = tmHelper.GetProperties(regionId, districtId, suburbId).Select(
-                x => new PropertyListItem
-                {
-                    Id = x.ListingId,
-                    Title = x.Title,
-                    Image = x.PictureHref,
+            var propertys = await tmHelper.GetPropertiesAsync(regionId, districtId, suburbId);
+            var props = propertys.Select(
+             x => new PropertyListItem
+             {
+                 Id = x.ListingId,
+                 Title = x.Title,
+                 Image = x.PictureHref,
 
-                });
+             });
 
 
 
@@ -57,8 +65,6 @@ namespace PropertyAnalysisMobile.Pages
 
             propList.ItemSelected += OnSelection;
 
-
-
             scroll.Content = propList;
 
             this.Content = new StackLayout
@@ -69,7 +75,6 @@ namespace PropertyAnalysisMobile.Pages
                     propList,
                 }
             };
-
         }
 
         void OnSelection(object sender, SelectedItemChangedEventArgs e)
@@ -80,13 +85,5 @@ namespace PropertyAnalysisMobile.Pages
             Navigation.PushAsync(new DetailsPage(item.Id));
         }
 
-        //private async Task<List<PropertyModel>> GetProperties(int regionId, int districtId, int suburbId)
-        //{
-        //    //var props = tmHelper.GetProperties(regionId, districtId, suburbId);
-
-        //    //var properties = await props;
-
-        //    //return properties;
-        //}
     }
 }

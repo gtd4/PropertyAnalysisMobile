@@ -49,7 +49,7 @@ namespace PropertyAnalysisMobile
 
         //load up properties
 
-        public List<PropertyModel> GetProperties(int regionId = 0, int districtId = 0, int suburbId = 0)
+        public async Task<List<PropertyModel>> GetPropertiesAsync(int regionId = 0, int districtId = 0, int suburbId = 0)
         {
             var tpr = new TradeMePropertyResultsViewModel();
             var authHeader = string.Format("oauth_consumer_key={0}, oauth_token={1}, oauth_signature_method=PLAINTEXT, oauth_signature={2}&{3}", consumerKey, oauthToken, consumerSecret, oauthSecret);
@@ -60,7 +60,7 @@ namespace PropertyAnalysisMobile
                 InitClient(authHeader, client);
                 
                 var props = client.GetAsync(url);
-                var response = props.Result;
+                var response = await props;
 
                 if (response.IsSuccessStatusCode)
                 {

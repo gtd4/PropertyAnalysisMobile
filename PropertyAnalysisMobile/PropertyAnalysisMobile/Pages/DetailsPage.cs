@@ -14,7 +14,7 @@ namespace PropertyAnalysisMobile.Pages
         StackLayout panel;
         double propLat, propLong;
         int propNorthing, propEasting;
-        Map PropertyMap;
+        PropertyMap PropertyMap;
 
         TradeMeHelper tmHelper;
         public DetailsPage(int propertyId)
@@ -81,7 +81,7 @@ namespace PropertyAnalysisMobile.Pages
 
         private void SetMap(string title, string address)
         {
-            PropertyMap = new Map(MapSpan.FromCenterAndRadius(new Position(propLat, propLong), Distance.FromKilometers(1)))
+            PropertyMap = new PropertyMap(MapSpan.FromCenterAndRadius(new Position(propLat, propLong), Distance.FromKilometers(1)))
             {
 
             };

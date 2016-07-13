@@ -28,6 +28,12 @@ namespace PropertyAnalysisMobile
 
         public MainPage()
         {
+            Init();
+
+        }
+
+        private void Init()
+        {
             pckrHelper = new PickerHelper();
             tmHelper = new TradeMeHelper();
 
@@ -73,7 +79,6 @@ namespace PropertyAnalysisMobile
             searchBtn.Clicked += ButtonClicked;
 
             panel.Children.Add(searchBtn);
-
         }
 
         void ButtonClicked(object sender, EventArgs ea)

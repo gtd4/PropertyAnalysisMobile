@@ -48,6 +48,7 @@
     <Compile Include="Models\PhotoUrl.cs" />
     <Compile Include="Models\PropertyFilterModel.cs" />
     <Compile Include="Models\PropertyListItem.cs" />
+    <Compile Include="Models\PropertyMap.cs" />
     <Compile Include="Models\PropertyModel.cs" />
     <Compile Include="Models\PropertyViewModel.cs" />
     <Compile Include="Models\Region.cs" />
